@@ -10,10 +10,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
-import { CreateCaseDto } from './dto/create-case.dto';
-import { UpdateCaseDto } from './dto/update-case.dto';
+import type { CreateCaseDto } from './dto/create-case.dto';
+import type { UpdateCaseDto } from './dto/update-case.dto';
 import { CasesService } from './cases.service';
-import { CaseStatus } from './entities/case-record.entity';
+import type { CaseStatus } from './entities/case-record.entity';
 
 @Controller('cases')
 @UseGuards(AuthGuard)
