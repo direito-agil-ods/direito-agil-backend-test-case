@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<Request>();
@@ -23,10 +23,23 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Authentication is not configured');
     }
 
-    // TODO (Task 2):
-    // 1) Validate "Bearer <token>" format.
-    // 2) Compare <token> with expectedToken variable.
-    // 3) Allow request only when token is valid.
-    throw new UnauthorizedException('Token validation not implemented yet');
+    const headerParts = authorizationHeader.split(' ');
+
+    if (headerParts.length !== 2 || !headerParts[1]) {
+      throw new UnauthorizedException('Invalid authorization header format');
+    }
+
+    const [tokenType, accessToken] = headerParts;
+
+    if (tokenType !== 'Bearer') {
+      throw new UnauthorizedException('Invalid token type');
+    }
+
+    if (accessToken !== expectedToken) {
+      throw new UnauthorizedException('Invalid access token');
+    }
+
+    return true;
+
   }
 }
