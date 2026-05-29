@@ -6,12 +6,14 @@ import { NextFunction, Request, Response } from 'express';
 export class RequestMetricsMiddleware implements NestMiddleware {
   use(request: Request, response: Response, next: NextFunction): void {
     const startedAt = Date.now();
+    const REQUEST_ID_HEADER = 'x-request-id';
 
-    // TODO (Task 1): preserve the request id when a client sends x-request-id.
-    // TODO (Task 1): generate a UUID when x-request-id is missing.
-    const requestId = randomUUID();
+    let requestId = request.header(REQUEST_ID_HEADER);
 
-    response.setHeader('x-request-id', requestId);
+    if (!requestId) {
+      requestId = randomUUID();
+    }
+    response.setHeader(REQUEST_ID_HEADER, requestId);
 
     response.on('finish', () => {
       const elapsedMs = Date.now() - startedAt;

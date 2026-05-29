@@ -56,6 +56,13 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer()).get('/cases').expect(401);
   });
 
+it('/cases (GET) should return 401 with invalid access token', async () => {
+    await request(app.getHttpServer())
+      .get('/cases')
+      .set('Authorization', 'Bearer invalidaccesstoken')
+      .expect(401);
+  });
+
   it('/cases (CRUD) should work when authenticated', async () => {
     const server = app.getHttpServer();
     const authHeader = `Bearer ${DEMO_ACCESS_TOKEN}`;
@@ -100,6 +107,7 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect(({ body }) => {
         expect(body.status).toBe('IN_PROGRESS');
+        expect(body.updatedAt).not.toBe(createdCase.updatedAt);
       });
 
     await request(server)
@@ -112,6 +120,13 @@ describe('AppController (e2e)', () => {
       .set('Authorization', authHeader)
       .expect(200)
       .expect([]);
+  });
+
+it('/cases/:id (GET) should return 404 when the case is not found', async () => {
+    await request(app.getHttpServer())
+      .get('/cases/non-existing-id')
+      .set('Authorization', `Bearer ${DEMO_ACCESS_TOKEN}`)
+      .expect(404);
   });
 
   afterEach(async () => {
