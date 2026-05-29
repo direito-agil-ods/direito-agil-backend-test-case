@@ -35,7 +35,7 @@ Implemente as seguintes melhorias no projeto:
    - Garantir o retorno de `404` quando o registro não existir.
 
 4. **Questões técnicas**
-   - Leia as perguntas sugeridas ao final deste README e esteja pronto para explicar suas decisões.
+   - Leia as perguntas sobre o desafio ao final deste README e responda cada uma delas.
 
 ---
 
@@ -153,7 +153,7 @@ Regras:
 
 ---
 
-## Perguntas sugeridas para a entrevista
+## Perguntas sobre o desafio
 
 1. Qual a diferença entre middleware, guard e interceptor no NestJS?
 2. Em que momento você usaria um guard em vez de validar o token dentro do controller?
