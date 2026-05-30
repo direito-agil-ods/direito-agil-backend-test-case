@@ -1,7 +1,6 @@
 import {
   Injectable,
   NotFoundException,
-  NotImplementedException,
 } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateCaseDto } from './dto/create-case.dto';
@@ -49,20 +48,25 @@ export class CasesService {
     return caseRecord;
   }
 
-  update(id: string, _updateCaseDto: UpdateCaseDto): CaseRecord {
-    // TODO (Task 3): implement update logic for title/description/status.
-    // Required:
-    // - Return 404 when case does not exist.
-    // - Update only received fields.
-    // - Update "updatedAt" timestamp.
-    throw new NotImplementedException('Case update is not implemented yet');
+  update(id: string, updateCaseDto: UpdateCaseDto): CaseRecord {
+    const now = new Date().toISOString();
+    const caseRecord = this.findOne(id);
+
+    const updatedCaseRecord: CaseRecord = {
+      id: caseRecord.id,
+      title: updateCaseDto.title ? updateCaseDto.title : caseRecord.title,
+      description: updateCaseDto.description ? updateCaseDto.description : caseRecord.description,
+      status: updateCaseDto.status ? updateCaseDto.status : caseRecord.status,
+      createdAt: caseRecord.createdAt,
+      updatedAt: now,
+    };
+
+    this.cases.set(id, updatedCaseRecord);
+    return updatedCaseRecord;
   }
 
-  remove(_id: string): void {
-    // TODO (Task 3): implement delete logic.
-    // Required:
-    // - Return 404 when case does not exist.
-    // - Remove the case from in-memory storage.
-    throw new NotImplementedException('Case delete is not implemented yet');
+  remove(id: string): void {
+    this.findOne(id);
+    this.cases.delete(id);
   }
 }
